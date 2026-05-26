@@ -9,6 +9,7 @@ const config: Options = {
   dts: true,
   format: ["cjs", "esm"],
   inject: ["./react-import.js"],
+  injectStyles: true,
   external: [
     "react",
     "react-dom",

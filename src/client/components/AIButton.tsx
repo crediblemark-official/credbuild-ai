@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { useCredBuildAI } from "../useCredBuildAI";
 import { AIPanel } from "./AIPanel";
+import "../compiled.css";
 
 export interface AIButtonProps {
   data: any;
@@ -28,14 +29,52 @@ export function AIButton({ data, onChange, config, assistantUrl = "/api/ai", cla
     }
   };
 
+  const cssStyles = `
+    .cb-ai-button-wrapper {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 99999;
+    }
+    .cb-ai-button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, #fbbf24, #f97316) !important;
+      color: #000000 !important;
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+      outline: none;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .cb-ai-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+    .cb-ai-button:active {
+      transform: scale(0.95);
+    }
+    @keyframes cb-pulse-shimmer {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.95); }
+    }
+    .cb-ai-pulse {
+      animation: cb-pulse-shimmer 2s infinite ease-in-out;
+    }
+  `;
+
   return (
     <>
-      <div className={`cb-ai-button-wrapper fixed bottom-4 right-4 z-[99999] ${className}`}>
-        <button
-          onClick={() => setShowPanel(!showPanel)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-xs shadow-md hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-300 cursor-pointer border-none outline-none"
-        >
-          <Sparkles size={13} className="animate-pulse" />
+      <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
+      <div className={`cb-ai-button-wrapper ${className}`}>
+        <button onClick={() => setShowPanel(!showPanel)} className="cb-ai-button">
+          <Sparkles size={13} className="cb-ai-pulse" />
           Bantu pakai AI
         </button>
       </div>

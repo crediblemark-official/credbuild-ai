@@ -131,7 +131,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
               <button
                 type="button"
                 onClick={onUndo}
-                className="flex items-center gap-1 px-2 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-amber-500 hover:bg-zinc-850 hover:text-amber-400 transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-2 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-amber-500 hover:bg-zinc-800 hover:text-amber-400 transition-colors cursor-pointer"
                 disabled={isLoading}
               >
                 <RotateCcw size={11} />
