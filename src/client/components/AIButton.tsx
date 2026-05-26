@@ -23,8 +23,6 @@ export function AIButton({ data, onChange, config, assistantUrl = "/api/ai", cla
   const handleGenerate = async (prompt: string, mode: "page" | "section") => {
     try {
       await sendPrompt(prompt, mode);
-      // Keep panel open after generation so user can undo if they want, or close it. 
-      // Closing is fine, but keeping it open or letting them undo is nice.
     } catch (e) {
       // Error handled by hook
     }
@@ -32,7 +30,7 @@ export function AIButton({ data, onChange, config, assistantUrl = "/api/ai", cla
 
   return (
     <>
-      <div className={`cb-ai-button-wrapper fixed bottom-4 right-4 z-50 ${className}`}>
+      <div className={`cb-ai-button-wrapper fixed bottom-4 right-4 z-[99999] ${className}`}>
         <button
           onClick={() => setShowPanel(!showPanel)}
           className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-xs shadow-md hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-300 cursor-pointer border-none outline-none"

@@ -37,7 +37,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
   ];
 
   return (
-    <div className="cb-ai-panel fixed bottom-16 right-4 w-[320px] p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white shadow-2xl z-50 flex flex-col font-sans">
+    <div className="cb-ai-panel fixed bottom-16 right-4 w-[320px] p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white shadow-2xl z-[99999] flex flex-col font-sans">
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-zinc-800/80 mb-3">
         <div className="flex items-center gap-1.5">
@@ -48,7 +48,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
         </div>
         <button
           onClick={onClose}
-          className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-850 transition-colors cursor-pointer"
+          className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
         >
           <X size={14} />
         </button>
@@ -61,7 +61,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
           onClick={() => setMode("page")}
           className={`flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
             mode === "page"
-              ? "bg-zinc-850 text-amber-400 shadow-sm"
+              ? "bg-zinc-800 text-amber-400 shadow-sm"
               : "text-zinc-400 hover:text-white"
           }`}
         >
@@ -73,7 +73,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
           onClick={() => setMode("section")}
           className={`flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
             mode === "section"
-              ? "bg-zinc-850 text-amber-400 shadow-sm"
+              ? "bg-zinc-800 text-amber-400 shadow-sm"
               : "text-zinc-400 hover:text-white"
           }`}
         >
@@ -131,7 +131,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
               <button
                 type="button"
                 onClick={onUndo}
-                className="flex items-center gap-1 px-2 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-amber-500 hover:bg-zinc-900 hover:text-amber-400 transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-2 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-amber-500 hover:bg-zinc-850 hover:text-amber-400 transition-colors cursor-pointer"
                 disabled={isLoading}
               >
                 <RotateCcw size={11} />
@@ -143,7 +143,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
             <button
               type="button"
               onClick={onClose}
-              className="px-2.5 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-zinc-300 hover:bg-zinc-900 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors cursor-pointer"
               disabled={isLoading}
             >
               Batal
