@@ -1,6 +1,6 @@
 {
   "name": "@crediblemark/build-ai",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AI assistance and copilot companion for CredBuild visual editor",
   "author": "Rasyiqi Crediblemark",
   "main": "./dist/index.js",
@@ -19,6 +19,11 @@
     },
     "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "tsup",
