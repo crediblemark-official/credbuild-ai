@@ -1,0 +1,41 @@
+{
+  "name": "@crediblemark/build-ai",
+  "version": "0.1.0",
+  "description": "AI assistance and copilot companion for CredBuild visual editor",
+  "author": "Rasyiqi Crediblemark",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  },
+  "peerDependencies": {
+    "react": "^19.2.6",
+    "@crediblemark/build": "^0.25.5",
+    "lucide-react": "^1.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.14",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
