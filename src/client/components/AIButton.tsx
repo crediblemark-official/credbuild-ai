@@ -32,12 +32,12 @@ export function AIButton({ data, onChange, config, assistantUrl = "/api/ai", cla
 
   return (
     <>
-      <div className={`cb-ai-button-wrapper fixed bottom-6 right-6 z-50 ${className}`}>
+      <div className={`cb-ai-button-wrapper fixed bottom-4 right-4 z-50 ${className}`}>
         <button
           onClick={() => setShowPanel(!showPanel)}
-          className="flex items-center gap-2 px-5 py-3.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold shadow-lg hover:scale-105 active:scale-95 hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] transition-all duration-300 cursor-pointer border-none outline-none"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-xs shadow-md hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-300 cursor-pointer border-none outline-none"
         >
-          <Sparkles size={16} className="animate-pulse" />
+          <Sparkles size={13} className="animate-pulse" />
           Bantu pakai AI
         </button>
       </div>
