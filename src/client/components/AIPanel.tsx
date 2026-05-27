@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { Sparkles, Loader2, X, Wand2, Plus, RotateCcw } from "lucide-react";
 
 export interface AIPanelProps {
-  onClose: () => void;
+  onClose?: () => void;
   onGenerate: (prompt: string, mode: "page" | "section") => Promise<void>;
   isLoading: boolean;
   error: string | null;
   onUndo: () => void;
   canUndo: boolean;
+  inline?: boolean;
 }
 
-export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo }: AIPanelProps) {
+export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo, inline = false }: AIPanelProps) {
   const [prompt, setPrompt] = useState("");
   const [mode, setMode] = useState<"page" | "section">("page");
 
@@ -37,32 +38,50 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
   ];
 
   return (
-    <div className="cb-ai-panel fixed bottom-16 right-4 w-[320px] p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white shadow-2xl z-[99999] flex flex-col font-sans">
+    <div className={
+      inline
+        ? "cb-ai-panel w-full h-full flex flex-col font-sans p-3 overflow-y-auto bg-transparent text-zinc-900 dark:text-zinc-100"
+        : "cb-ai-panel fixed bottom-16 right-4 w-[320px] p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white shadow-2xl z-[99999] flex flex-col font-sans"
+    }>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-zinc-800/80 mb-3">
+      <div className={`flex items-center justify-between pb-2 border-b mb-3 ${
+        inline
+          ? 'border-zinc-200 dark:border-zinc-800/80'
+          : 'border-zinc-800/80'
+      }`}>
         <div className="flex items-center gap-1.5">
-          <div className="p-1 rounded-md bg-amber-500/10 text-amber-400">
+          <div className="p-1 rounded-md bg-amber-500/10 text-amber-500 dark:text-amber-400">
             <Sparkles size={14} />
           </div>
-          <span className="text-xs font-bold tracking-tight">AI Assistant</span>
+          <span className={`text-xs font-bold tracking-tight uppercase ${
+            inline
+              ? 'text-zinc-500 dark:text-zinc-400'
+              : 'text-white'
+          }`}>AI Assistant</span>
         </div>
-        <button
-          onClick={onClose}
-          className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
-        >
-          <X size={14} />
-        </button>
+        {!inline && onClose && (
+          <button
+            onClick={onClose}
+            className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+          >
+            <X size={14} />
+          </button>
+        )}
       </div>
 
       {/* Mode Selector */}
-      <div className="grid grid-cols-2 gap-1 p-0.5 rounded-lg bg-zinc-900 border border-zinc-800/80 mb-3">
+      <div className={`grid grid-cols-2 gap-1 p-0.5 rounded-lg border mb-3 ${
+        inline
+          ? 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800/80'
+          : 'bg-zinc-900 border-zinc-800/80'
+      }`}>
         <button
           type="button"
           onClick={() => setMode("page")}
           className={`flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
             mode === "page"
-              ? "bg-zinc-800 text-amber-400 shadow-sm"
-              : "text-zinc-400 hover:text-white"
+              ? (inline ? 'bg-white dark:bg-zinc-800 text-amber-600 dark:text-amber-400 shadow-sm' : 'bg-zinc-800 text-amber-400 shadow-sm')
+              : (inline ? 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white' : 'text-zinc-400 hover:text-white')
           }`}
         >
           <Wand2 size={12} />
@@ -73,8 +92,8 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
           onClick={() => setMode("section")}
           className={`flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
             mode === "section"
-              ? "bg-zinc-800 text-amber-400 shadow-sm"
-              : "text-zinc-400 hover:text-white"
+              ? (inline ? 'bg-white dark:bg-zinc-800 text-amber-600 dark:text-amber-400 shadow-sm' : 'bg-zinc-800 text-amber-400 shadow-sm')
+              : (inline ? 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white' : 'text-zinc-400 hover:text-white')
           }`}
         >
           <Plus size={12} />
@@ -92,7 +111,11 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
               ? "Jelaskan website seperti apa yang ingin Anda buat..."
               : "Jelaskan seksi/blok apa yang ingin Anda tambahkan..."
           }
-          className="w-full h-20 p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs placeholder-zinc-500 text-zinc-200 focus:border-amber-500 focus:outline-none resize-none transition-colors"
+          className={`w-full h-20 p-2.5 rounded-lg border text-xs placeholder-zinc-500 focus:border-amber-500 focus:outline-none resize-none transition-colors ${
+            inline
+              ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200'
+              : 'bg-zinc-900 border-zinc-800 text-zinc-200'
+          }`}
           disabled={isLoading}
         />
 
@@ -108,7 +131,11 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
                   key={suggestion}
                   type="button"
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="w-full text-left px-2 py-1 rounded bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-400 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all truncate cursor-pointer"
+                  className={`w-full text-left px-2 py-1 rounded border text-[10px] transition-all truncate cursor-pointer ${
+                    inline
+                      ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:border-zinc-700'
+                  }`}
                   disabled={isLoading}
                 >
                   {suggestion}
@@ -125,13 +152,21 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
         )}
 
         {/* Action Button */}
-        <div className="flex justify-between items-center mt-3 pt-2.5 border-t border-zinc-800">
+        <div className={`flex justify-between items-center mt-3 pt-2.5 border-t ${
+          inline
+            ? 'border-zinc-200 dark:border-zinc-800'
+            : 'border-zinc-800'
+        }`}>
           <div>
             {canUndo && (
               <button
                 type="button"
                 onClick={onUndo}
-                className="flex items-center gap-1 px-2 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-amber-500 hover:bg-zinc-800 hover:text-amber-400 transition-colors cursor-pointer"
+                className={`flex items-center gap-1 px-2 py-1 rounded-md border text-[10px] font-semibold text-amber-600 dark:text-amber-500 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer ${
+                  inline
+                    ? 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-850'
+                    : 'border-zinc-800 hover:bg-zinc-800'
+                }`}
                 disabled={isLoading}
               >
                 <RotateCcw size={11} />
@@ -140,14 +175,16 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
             )}
           </div>
           <div className="flex gap-1.5">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-2.5 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors cursor-pointer"
-              disabled={isLoading}
-            >
-              Batal
-            </button>
+            {!inline && onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-2.5 py-1 rounded-md border border-zinc-800 text-[10px] font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors cursor-pointer"
+                disabled={isLoading}
+              >
+                Batal
+              </button>
+            )}
             <button
               type="submit"
               className="flex items-center gap-1 px-3 py-1 rounded-md bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-[10px] hover:shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
