@@ -272,9 +272,6 @@
   .flex-1 {
     flex: 1;
   }
-  .transform {
-    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
-  }
   .animate-spin {
     animation: var(--animate-spin);
   }
@@ -524,15 +521,6 @@
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
-  }
-  .transition {
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
-    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-    transition-duration: var(--tw-duration, var(--default-transition-duration));
-  }
   .transition-all {
     transition-property: all;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -708,25 +696,90 @@
     }
   }
 }
-@property --tw-rotate-x {
-  syntax: "*";
-  inherits: false;
+.cb-ai-button-wrapper {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 99999;
 }
-@property --tw-rotate-y {
-  syntax: "*";
-  inherits: false;
+.cb-ai-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #fbbf24, #f97316) !important;
+  color: #000000 !important;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
-@property --tw-rotate-z {
-  syntax: "*";
-  inherits: false;
+.cb-ai-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
 }
-@property --tw-skew-x {
-  syntax: "*";
-  inherits: false;
+.cb-ai-button:active {
+  transform: scale(0.95);
 }
-@property --tw-skew-y {
-  syntax: "*";
-  inherits: false;
+@keyframes cb-pulse-shimmer {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+}
+.cb-ai-pulse {
+  animation: cb-pulse-shimmer 2s infinite ease-in-out;
+}
+.cb-ai-panel--inline textarea {
+  background-color: var(--cb-bg-base) !important;
+  border-color: var(--cb-border) !important;
+  color: var(--cb-silver) !important;
+}
+.cb-ai-panel--inline textarea::placeholder {
+  color: var(--cb-silver-muted) !important;
+  opacity: 0.6;
+}
+.cb-ai-panel--inline button.cb-ai-suggestion-btn {
+  background-color: var(--cb-bg-base) !important;
+  border-color: var(--cb-border) !important;
+  color: var(--cb-silver-muted) !important;
+}
+.cb-ai-panel--inline button.cb-ai-suggestion-btn:hover {
+  background-color: var(--cb-bg-panel) !important;
+  border-color: var(--cb-gold) !important;
+  color: var(--cb-gold) !important;
+}
+.cb-ai-panel--inline .cb-ai-mode-selector {
+  background-color: var(--cb-bg-base) !important;
+  border-color: var(--cb-border) !important;
+}
+.cb-ai-panel--inline .cb-ai-mode-btn {
+  color: var(--cb-silver-muted) !important;
+  background: transparent !important;
+}
+.cb-ai-panel--inline .cb-ai-mode-btn:hover {
+  color: var(--cb-silver) !important;
+}
+.cb-ai-panel--inline .cb-ai-mode-btn.cb-active {
+  background-color: var(--cb-bg-surface) !important;
+  color: var(--cb-gold) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+.cb-ai-panel--inline .cb-ai-undo-btn {
+  border-color: var(--cb-border) !important;
+  color: var(--cb-gold) !important;
+}
+.cb-ai-panel--inline .cb-ai-undo-btn:hover {
+  background-color: var(--cb-bg-panel) !important;
 }
 @property --tw-border-style {
   syntax: "*";
@@ -852,11 +905,6 @@
   inherits: false;
   initial-value: 0 0 #0000;
 }
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -865,11 +913,6 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
-      --tw-rotate-x: initial;
-      --tw-rotate-y: initial;
-      --tw-rotate-z: initial;
-      --tw-skew-x: initial;
-      --tw-skew-y: initial;
       --tw-border-style: solid;
       --tw-gradient-position: initial;
       --tw-gradient-from: #0000;
@@ -897,7 +940,6 @@
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
-      --tw-outline-style: solid;
     }
   }
 }

@@ -40,7 +40,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
   return (
     <div className={
       inline
-        ? "cb-ai-panel w-full h-full flex flex-col font-sans p-3 overflow-y-auto bg-transparent text-zinc-900 dark:text-zinc-100"
+        ? "cb-ai-panel cb-ai-panel--inline w-full h-full flex flex-col font-sans p-3 overflow-y-auto bg-transparent text-zinc-900 dark:text-zinc-100"
         : "cb-ai-panel fixed bottom-16 right-4 w-[320px] p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white shadow-2xl z-[99999] flex flex-col font-sans"
     }>
       {/* Header */}
@@ -70,7 +70,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
       </div>
 
       {/* Mode Selector */}
-      <div className={`grid grid-cols-2 gap-1 p-0.5 rounded-lg border mb-3 ${
+      <div className={`cb-ai-mode-selector grid grid-cols-2 gap-1 p-0.5 rounded-lg border mb-3 ${
         inline
           ? 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800/80'
           : 'bg-zinc-900 border-zinc-800/80'
@@ -78,7 +78,9 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
         <button
           type="button"
           onClick={() => setMode("page")}
-          className={`flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
+          className={`cb-ai-mode-btn flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
+            mode === "page" ? "cb-active" : ""
+          } ${
             mode === "page"
               ? (inline ? 'bg-white dark:bg-zinc-800 text-amber-600 dark:text-amber-400 shadow-sm' : 'bg-zinc-800 text-amber-400 shadow-sm')
               : (inline ? 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white' : 'text-zinc-400 hover:text-white')
@@ -90,7 +92,9 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
         <button
           type="button"
           onClick={() => setMode("section")}
-          className={`flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
+          className={`cb-ai-mode-btn flex items-center justify-center gap-1 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
+            mode === "section" ? "cb-active" : ""
+          } ${
             mode === "section"
               ? (inline ? 'bg-white dark:bg-zinc-800 text-amber-600 dark:text-amber-400 shadow-sm' : 'bg-zinc-800 text-amber-400 shadow-sm')
               : (inline ? 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white' : 'text-zinc-400 hover:text-white')
@@ -131,7 +135,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
                   key={suggestion}
                   type="button"
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className={`w-full text-left px-2 py-1 rounded border text-[10px] transition-all truncate cursor-pointer ${
+                  className={`cb-ai-suggestion-btn w-full text-left px-2 py-1 rounded border text-[10px] transition-all truncate cursor-pointer ${
                     inline
                       ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700'
                       : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:border-zinc-700'
@@ -162,7 +166,7 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
               <button
                 type="button"
                 onClick={onUndo}
-                className={`flex items-center gap-1 px-2 py-1 rounded-md border text-[10px] font-semibold text-amber-600 dark:text-amber-500 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer ${
+                className={`cb-ai-undo-btn flex items-center gap-1 px-2 py-1 rounded-md border text-[10px] font-semibold text-amber-600 dark:text-amber-500 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer ${
                   inline
                     ? 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-850'
                     : 'border-zinc-800 hover:bg-zinc-800'

@@ -2,11 +2,71 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { generateSystemInstruction } from "./promptBuilder";
 import { AIResponsePage, AIResponseSection, ComponentSchema } from "../types";
 
-export interface AIConfig {
+export interface AIConfigRow {
+  provider: "gemini" | "openai" | "openrouter" | "groq" | "nvidia";
   apiKey: string;
+  modelName?: string;
+}
+
+export interface AIConfig {
+  apiKey: string | string[] | AIConfigRow[];
   provider?: "gemini" | "openai" | "openrouter" | "groq" | "nvidia";
   modelName?: string;
   baseURL?: string;
+}
+
+let packageRotationIndex = 0;
+
+function resolveSingleConfig(aiConfig: AIConfig): AIConfig & { apiKey: string } {
+  const apiKeyRaw = aiConfig.apiKey;
+  let selectedKey = "";
+  let selectedProvider = aiConfig.provider;
+  let selectedModelName = aiConfig.modelName;
+
+  if (Array.isArray(apiKeyRaw)) {
+    if (apiKeyRaw.length > 0) {
+      const idx = packageRotationIndex % apiKeyRaw.length;
+      packageRotationIndex = (packageRotationIndex + 1) % apiKeyRaw.length;
+
+      const item = apiKeyRaw[idx];
+      if (typeof item === "object" && item !== null) {
+        selectedKey = (item.apiKey || "").trim();
+        selectedProvider = item.provider || aiConfig.provider;
+        selectedModelName = item.modelName || aiConfig.modelName;
+      } else {
+        selectedKey = String(item || "").trim();
+      }
+    }
+  } else if (typeof apiKeyRaw === "string") {
+    // Try to parse if it is a JSON array string
+    try {
+      const parsed = JSON.parse(apiKeyRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const idx = packageRotationIndex % parsed.length;
+        packageRotationIndex = (packageRotationIndex + 1) % parsed.length;
+        
+        const item = parsed[idx];
+        if (typeof item === "object" && item !== null) {
+          selectedKey = (item.apiKey || "").trim();
+          selectedProvider = item.provider || aiConfig.provider;
+          selectedModelName = item.modelName || aiConfig.modelName;
+        } else {
+          selectedKey = String(item || "").trim();
+        }
+      } else {
+        selectedKey = apiKeyRaw;
+      }
+    } catch (_) {
+      selectedKey = apiKeyRaw;
+    }
+  }
+
+  return {
+    ...aiConfig,
+    provider: selectedProvider,
+    apiKey: selectedKey,
+    modelName: selectedModelName,
+  };
 }
 
 /**
@@ -94,7 +154,8 @@ export async function generatePageWithAI(
   aiConfig: AIConfig,
   currentData?: any
 ): Promise<AIResponsePage> {
-  const provider = aiConfig.provider || "gemini";
+  const activeConfig = resolveSingleConfig(aiConfig);
+  const provider = activeConfig.provider || "gemini";
   const systemInstruction = generateSystemInstruction(schemas);
 
   let chatPrompt = `Generate a full landing page layout based on this user request: "${userPrompt}"`;
@@ -123,8 +184,8 @@ export async function generatePageWithAI(
   let text: string;
 
   if (provider === "gemini") {
-    const genAI = new GoogleGenerativeAI(aiConfig.apiKey);
-    const modelName = aiConfig.modelName || "gemini-1.5-flash";
+    const genAI = new GoogleGenerativeAI(activeConfig.apiKey);
+    const modelName = activeConfig.modelName || "gemini-1.5-flash";
     const model = genAI.getGenerativeModel({
       model: modelName,
       generationConfig: {
@@ -137,7 +198,7 @@ export async function generatePageWithAI(
     const result = await model.generateContent(chatPrompt);
     text = result.response.text();
   } else {
-    text = await callOpenAiCompatibleApi(systemInstruction, chatPrompt, aiConfig, 0.7);
+    text = await callOpenAiCompatibleApi(systemInstruction, chatPrompt, activeConfig, 0.7);
   }
 
   const cleanedText = cleanJsonText(text);
@@ -172,7 +233,8 @@ export async function generateSectionWithAI(
   aiConfig: AIConfig,
   currentData?: any
 ): Promise<AIResponseSection> {
-  const provider = aiConfig.provider || "gemini";
+  const activeConfig = resolveSingleConfig(aiConfig);
+  const provider = activeConfig.provider || "gemini";
   const systemInstruction = generateSystemInstruction(schemas);
 
   let chatPrompt = `Generate a single component section based on this user request: "${userPrompt}"`;
@@ -193,8 +255,8 @@ export async function generateSectionWithAI(
   let text: string;
 
   if (provider === "gemini") {
-    const genAI = new GoogleGenerativeAI(aiConfig.apiKey);
-    const modelName = aiConfig.modelName || "gemini-1.5-flash";
+    const genAI = new GoogleGenerativeAI(activeConfig.apiKey);
+    const modelName = activeConfig.modelName || "gemini-1.5-flash";
     const model = genAI.getGenerativeModel({
       model: modelName,
       generationConfig: {
@@ -208,7 +270,7 @@ export async function generateSectionWithAI(
     text = result.response.text();
   } else {
     const customSystemInstruction = `${systemInstruction}\nFor this request, you MUST generate exactly ONE component block object. Do not wrap it in a page layout structure. Just return a single component node.`;
-    text = await callOpenAiCompatibleApi(customSystemInstruction, chatPrompt, aiConfig, 0.7);
+    text = await callOpenAiCompatibleApi(customSystemInstruction, chatPrompt, activeConfig, 0.7);
   }
 
   const cleanedText = cleanJsonText(text);
@@ -232,7 +294,8 @@ export async function refineFieldWithAI(
   currentValue: any,
   aiConfig: AIConfig
 ): Promise<any> {
-  const provider = aiConfig.provider || "gemini";
+  const activeConfig = resolveSingleConfig(aiConfig);
+  const provider = activeConfig.provider || "gemini";
   const systemInstruction = `You are an inline copywriting and styling editor assistant. 
 Your task is to rewrite or modify a specific input value (such as a string, a CSS color, or an object) based on the user's instructions.
 Always preserve the general structure of the input.
@@ -247,8 +310,8 @@ Current Value: ${JSON.stringify(currentValue)}`;
   let text: string;
 
   if (provider === "gemini") {
-    const genAI = new GoogleGenerativeAI(aiConfig.apiKey);
-    const modelName = aiConfig.modelName || "gemini-1.5-flash";
+    const genAI = new GoogleGenerativeAI(activeConfig.apiKey);
+    const modelName = activeConfig.modelName || "gemini-1.5-flash";
 
     const model = genAI.getGenerativeModel({
       model: modelName,
@@ -262,7 +325,7 @@ Current Value: ${JSON.stringify(currentValue)}`;
     const result = await model.generateContent(chatPrompt);
     text = result.response.text();
   } else {
-    text = await callOpenAiCompatibleApi(systemInstruction, chatPrompt, aiConfig, 0.2);
+    text = await callOpenAiCompatibleApi(systemInstruction, chatPrompt, activeConfig, 0.2);
   }
 
   const cleanedText = cleanJsonText(text);

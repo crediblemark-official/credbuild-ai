@@ -1,6 +1,6 @@
 {
   "name": "@crediblemark/build-ai",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "AI assistance and copilot companion for CredBuild visual editor",
   "author": "Rasyiqi Crediblemark",
   "main": "./dist/index.js",
