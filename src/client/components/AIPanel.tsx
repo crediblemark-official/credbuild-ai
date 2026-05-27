@@ -105,6 +105,15 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
         </button>
       </div>
 
+      {/* Explanation Note */}
+      <div className={`p-2.5 rounded-lg text-[10px] leading-relaxed mb-3 ${
+        inline
+          ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-900/30 text-amber-800 dark:text-amber-300'
+          : 'bg-amber-950/30 border border-amber-900/40 text-amber-300'
+      }`}>
+        💡 <strong>Info:</strong> AI Assistant ini berfungsi untuk merancang dan menyusun halaman berdasarkan <strong>komponen blok visual</strong>, bukan untuk mengedit kode HTML secara langsung.
+      </div>
+
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col flex-1">
         <textarea
@@ -113,13 +122,14 @@ export function AIPanel({ onClose, onGenerate, isLoading, error, onUndo, canUndo
           placeholder={
             mode === "page"
               ? "Jelaskan website seperti apa yang ingin Anda buat..."
-              : "Jelaskan seksi/blok apa yang ingin Anda tambahkan..."
+              : "Jelaskan seksi/blok apa yang ingin Anda tambah..."
           }
-          className={`w-full h-20 p-2.5 rounded-lg border text-xs placeholder-zinc-500 focus:border-amber-500 focus:outline-none resize-none transition-colors ${
+          className={`cb-ai w-full h-20 p-2.5 rounded-lg border text-xs placeholder-zinc-500 focus:border-amber-500 focus:outline-none resize-y transition-colors ${
             inline
               ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200'
               : 'bg-zinc-900 border-zinc-800 text-zinc-200'
           }`}
+          style={{ minHeight: 80 }}
           disabled={isLoading}
         />
 
